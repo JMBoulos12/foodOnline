@@ -1,0 +1,14 @@
+{% autoescape off %}
+
+Hi {{user.first_name}},
+
+{% if is_approved %}
+Congratulations! Your restaurant has been approved by our admin team. --CompanyName
+{% else %}
+We're sorry! Your are not eligible for publishing your food menu on our marketplace. For more details, please contact support@CompanyName.com. --CompanyName
+Please click on below to confirm your registration.
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+
+
+{% endautoescape %}
