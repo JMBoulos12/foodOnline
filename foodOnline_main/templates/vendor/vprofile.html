@@ -55,7 +55,7 @@
                                 <li class="gal-img">
                                   <div class="drag-list">
                                     <div class="item-thumb">
-                                      <img class="thumbnail" src="profile.cover_picture.url" alt="Cover Photo">
+                                      <img class="thumbnail" src="{{ profile.cover_photo.url }}" alt="Cover Photo">
                                     </div>
                                   </div>
                                 </li>
@@ -78,7 +78,7 @@
                                 <li class="gal-img">
                                   <div class="drag-list">
                                     <div class="item-thumb">
-                                      <img class="thumbnail" src="vendor.vendor_license.url" alt="Vendor License">
+                                      <img class="thumbnail" src="{{ vendor.vendor_license.url }}" alt="Vendor License">
                                     </div>
                                   </div>
                                 </li>
@@ -91,7 +91,6 @@
                               </div>
                               
                             </div>
-                            <label class="text-manager">{{ vendor_form.vendor_license }}</label>
                           </div>
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
