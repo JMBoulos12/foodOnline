@@ -151,7 +151,7 @@ def add_food(request):
     else:
         form = FoodItemForm()
         # Modify this form
-        form.fields['category'].queryset = Category.objects.filter(Vendor=get_vendor(request))
+        form.fields['category'].queryset = Category.objects.filter(vendor=get_vendor(request))
     context = {
         'form': form,
     }
@@ -190,6 +190,6 @@ def edit_food(request, pk=None):
 @user_passes_test(check_role_vendor)
 def delete_food(request, pk=None):
     food = get_object_or_404(FoodItem, pk=pk)
-    categorfoody.delete()
+    food.delete()
     messages.success(request, 'Food has been deleted successfully!')
     return redirect('fooditems_by_category', food.category.id)
