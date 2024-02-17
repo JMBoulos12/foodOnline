@@ -25,12 +25,17 @@
     "forloop",
     "gismodels",
     "imperdiet",
+    "Libsite",
     "licence",
     "Listin",
     "longlitude",
     "messsage",
     "neque",
     "onboarded",
+    "osgeo",
+    "packagesosgeo",
+    "packagesosgeodataproj",
+    "packagesosgeogdal",
     "pincode",
     "pyexpat",
     "Restarurants",
@@ -48,5 +53,8 @@
     "vehicula",
     "vprofile",
     "webfonts"
+  ],
+  "json.schemas": [
+    
   ]
 }
