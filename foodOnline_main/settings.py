@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'marketplace',
     'django.contrib.gis',
     'customers',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +74,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'accounts.context_processors.get_vendor',
+                'accounts.context_processors.get_google_api',
                 'marketplace.context_processors.get_cart_counter',  # <-- add this line
                 'marketplace.context_processors.get_cart_amounts',
                 'accounts.context_processors.get_user_profile',
@@ -164,7 +166,7 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'foodOnline Marketplace <meditation88master@gmail.com>'
 
-GOOGLE_API_KEY = "AIzaSyD56_5W63vOZ0keB7m2va945I7FdijC9AI"
+GOOGLE_API_KEY = "AIzaSyChn-wmQXy7K1W3pZs9yIQARo8nA0mgJ-8"
 
 
 
@@ -172,3 +174,10 @@ GOOGLE_API_KEY = "AIzaSyD56_5W63vOZ0keB7m2va945I7FdijC9AI"
 os.environ['PATH'] = os.path.join(BASE_DIR, 'env\Lib\site-packages\osgeo') + ';' + os.environ['PATH']
 os.environ['PROJ_LIB'] = os.path.join(BASE_DIR, 'env\Lib\site-packages\osgeo\data\proj') + ';' + os.environ['PATH']
 GDAL_LIBRARY_PATH = os.path.join(BASE_DIR, 'env\Lib\site-packages\osgeo\gdal304.dll')
+
+PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID', default='')
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
+
+#RZP_KEY_ID = config('RZP_KEY_ID')
+#RZP_KEY_SECRET = config('RZP_KEY_SECRET')
