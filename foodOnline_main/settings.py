@@ -166,7 +166,7 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'foodOnline Marketplace <meditation88master@gmail.com>'
 
-GOOGLE_API_KEY = "AIzaSyChn-wmQXy7K1W3pZs9yIQARo8nA0mgJ-8"
+GOOGLE_API_KEY = ""
 
 
 
