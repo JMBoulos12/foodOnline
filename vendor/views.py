@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.db import IntegrityError
 
 from menu.forms import CategoryForm, FoodItemForm
+from orders.models import Order, OrderedFood
 import vendor
 from .forms import VendorForm, OpeningHourForm
 from accounts.forms import UserProfileForm
@@ -22,14 +23,14 @@ from django.template.defaultfilters import slugify
 def get_vendor(request):
     vendor = Vendor.objects.get(user=request.user)
     return vendor
-    
+
 
 @login_required(login_url='login')
 @user_passes_test(check_role_vendor)
 def vprofile(request):
     profile = get_object_or_404(UserProfile, user=request.user)
     vendor = get_object_or_404(Vendor, user=request.user)
-    
+
     if request.method == 'POST':
         profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
         vendor_form = VendorForm(request.POST, request.FILES, instance=vendor)
@@ -43,9 +44,8 @@ def vprofile(request):
             print(vendor_form.errors)
     else:
         profile_form = UserProfileForm(instance = profile)
-        vendor_form = VendorForm(instance = profile)
-    profile_form = UserProfileForm(instance = profile)
-    vendor_form = VendorForm(instance=vendor)
+        vendor_form = VendorForm(instance=vendor)
+
     context = {
         'profile_form': profile_form,
         'vendor_form': vendor_form,
@@ -53,6 +53,7 @@ def vprofile(request):
         'vendor': vendor,
     }
     return render(request, 'vendor/vprofile.html', context)
+
 
 @login_required(login_url='login')
 @user_passes_test(check_role_vendor)
@@ -70,7 +71,7 @@ def menu_builder(request):
 def fooditems_by_category(request, pk=None):
     vendor = get_vendor(request)
     category = get_object_or_404(Category, pk=pk)
-    fooditems = FoodItem.objects.filter(vendor=vendor,  category=category)
+    fooditems = FoodItem.objects.filter(vendor=vendor, category=category)
     context = {
         'fooditems': fooditems,
         'category': category,
@@ -88,18 +89,18 @@ def add_category(request):
             category = form.save(commit=False)
             category.vendor = get_vendor(request)
             
-            category.save() # here the category ID will be generated
-            category.slug = slugify(category_name)+'-'+str(category.id) # Chicken-15
+            category.save() # here the category id will be generated
+            category.slug = slugify(category_name)+'-'+str(category.id) # chicken-15
             category.save()
             messages.success(request, 'Category added successfully!')
             return redirect('menu_builder')
         else:
             print(form.errors)
-            
+
     else:
         form = CategoryForm()
     context = {
-        'form' : form,
+        'form': form,
     }
     return render(request, 'vendor/add_category.html', context)
 
@@ -120,11 +121,11 @@ def edit_category(request, pk=None):
             return redirect('menu_builder')
         else:
             print(form.errors)
-            
+
     else:
         form = CategoryForm(instance=category)
     context = {
-        'form' : form,
+        'form': form,
         'category': category,
     }
     return render(request, 'vendor/edit_category.html', context)
@@ -150,13 +151,13 @@ def add_food(request):
             food.vendor = get_vendor(request)
             food.slug = slugify(foodtitle)
             form.save()
-            messages.success(request, 'Category added successfully!')
+            messages.success(request, 'Food Item added successfully!')
             return redirect('fooditems_by_category', food.category.id)
         else:
             print(form.errors)
     else:
         form = FoodItemForm()
-        # Modify this form
+        # modify this form
         form.fields['category'].queryset = Category.objects.filter(vendor=get_vendor(request))
     context = {
         'form': form,
@@ -181,12 +182,12 @@ def edit_food(request, pk=None):
             return redirect('fooditems_by_category', food.category.id)
         else:
             print(form.errors)
-            
+
     else:
         form = FoodItemForm(instance=food)
-        form.fields['category'].queryset = Category.objects.filter(Vendor=get_vendor(request))
+        form.fields['category'].queryset = Category.objects.filter(vendor=get_vendor(request))
     context = {
-        'form' : form,
+        'form': form,
         'food': food,
     }
     return render(request, 'vendor/edit_food.html', context)
@@ -197,7 +198,7 @@ def edit_food(request, pk=None):
 def delete_food(request, pk=None):
     food = get_object_or_404(FoodItem, pk=pk)
     food.delete()
-    messages.success(request, 'Food has been deleted successfully!')
+    messages.success(request, 'Food Item has been deleted successfully!')
     return redirect('fooditems_by_category', food.category.id)
 
 
@@ -206,7 +207,7 @@ def opening_hours(request):
     form = OpeningHourForm()
     context = {
         'form': form,
-        'opening_hours': opening_hours
+        'opening_hours': opening_hours,
     }
     return render(request, 'vendor/opening_hours.html', context)
 
@@ -242,3 +243,30 @@ def remove_opening_hours(request, pk=None):
             hour = get_object_or_404(OpeningHour, pk=pk)
             hour.delete()
             return JsonResponse({'status': 'success', 'id': pk})
+
+
+def order_detail(request, order_number):
+    try:
+        order = Order.objects.get(order_number=order_number, is_ordered=True)
+        ordered_food = OrderedFood.objects.filter(order=order, fooditem__vendor=get_vendor(request))
+
+        context = {
+            'order': order,
+            'ordered_food': ordered_food,
+            'subtotal': order.get_total_by_vendor()['subtotal'],
+            'tax_data': order.get_total_by_vendor()['tax_dict'],
+            'grand_total': order.get_total_by_vendor()['grand_total'],
+        }
+    except:
+        return redirect('vendor')
+    return render(request, 'vendor/order_detail.html', context)
+
+
+def my_orders(request):
+    vendor = Vendor.objects.get(user=request.user)
+    orders = Order.objects.filter(vendors__in=[vendor.id], is_ordered=True).order_by('created_at')
+
+    context = {
+        'orders': orders,
+    }
+    return render(request, 'vendor/my_orders.html', context)

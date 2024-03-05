@@ -100,14 +100,14 @@ def place_order(request):
                     "key2": "value2"
                 }
             }
-            #rzp_order = client.order.create(data=DATA)
-            #rzp_order_id = rzp_order['id']
+            rzp_order = client.order.create(data=DATA)
+            rzp_order_id = rzp_order['id']
 
             context = {
                 'order': order,
                 'cart_items': cart_items,
-            #    'rzp_order_id': rzp_order_id,
-            #    'RZP_KEY_ID': RZP_KEY_ID,
+                'rzp_order_id': rzp_order_id,
+                'RZP_KEY_ID': RZP_KEY_ID,
                 'rzp_amount': float(order.total) * 100,
             }
             return render(request, 'orders/place_order.html', context)
@@ -213,7 +213,7 @@ def payments(request):
 def order_complete(request):
     order_number = request.GET.get('order_no')
     transaction_id = request.GET.get('trans_id')
-    
+
     try:
         order = Order.objects.get(order_number=order_number, payment__transaction_id=transaction_id, is_ordered=True)
         ordered_food = OrderedFood.objects.filter(order=order)
@@ -233,3 +233,4 @@ def order_complete(request):
         return render(request, 'orders/order_complete.html', context)
     except:
         return redirect('home')
+    

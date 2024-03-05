@@ -6,7 +6,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>FoodBakery</title>
+	<title>FoodOnline</title>
 	<!-- Google Font Family Link Start -->
 	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Montserrat:400,700">
 	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,800">
@@ -33,6 +33,18 @@
 	{% endif %}
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="{% static 'js/custom.js' %}"></script>
+	
+	<!-- Include the PayPal JavaScript SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}&currency=USD"></script>
+
+	<!-- Include Datatables plugin script and css -->
+	<link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+	<script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+	<script>
+		$(document).ready( function () {
+			$('#myOrdersTable').DataTable();
+		} );
+	</script>
 
 	<style>
 		body, .main-section p, .mce-content-body p{
@@ -43,13 +55,17 @@
 
 <body>
 
-  <!-- LOAD NAVBAR HERE -->
-  {% include 'includes/navbar.html' %}
+    <!-- LOAD NAVBAR HERE -->
+    {% include 'includes/navbar.html' %}
 
-  <!-- LOAD CONTENT HERE  -->
-  {% block content %}
-  <!-- CONTENT GOES HERE  -->
-  {% endblock %}
+    <!-- LOAD CONTENT HERE -->
+    {% block content %}
+        <!-- CONTENT GOES HERE -->
+    {% endblock %}
 
-  <!-- LOAD FOOTER HERE  -->
-  {% include 'includes/footer.html' %}
+    <!-- LOAD FOOTER HERE -->
+    {% include 'includes/footer.html' %}
+
+
+	
+		
