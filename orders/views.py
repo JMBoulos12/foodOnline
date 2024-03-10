@@ -100,17 +100,17 @@ def place_order(request):
                     "key2": "value2"
                 }
             }
-            rzp_order = client.order.create(data=DATA)
-            rzp_order_id = rzp_order['id']
+            #rzp_order = client.order.create(data=DATA)
+            #rzp_order_id = rzp_order['id']
 
-            context = {
+            """ context = {
                 'order': order,
                 'cart_items': cart_items,
                 'rzp_order_id': rzp_order_id,
                 'RZP_KEY_ID': RZP_KEY_ID,
                 'rzp_amount': float(order.total) * 100,
             }
-            return render(request, 'orders/place_order.html', context)
+            return render(request, 'orders/place_order.html', context) """
 
         else:
             print(form.errors)
